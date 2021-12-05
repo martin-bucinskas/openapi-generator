@@ -293,6 +293,44 @@ public class InlineModelResolver {
                         }
                     }
                 }
+            } else if (property instanceof ComposedSchema) {
+                ComposedSchema cp = (ComposedSchema) property;
+                String defaultModelName = "all_of_" + key + "_response";
+                String modelTitle = null;
+
+                if (cp.getExtensions() != null && cp.getExtensions().containsKey("x-all-of-name")) {
+                    modelTitle = cp.getExtensions().get("x-all-of-name").toString();
+                }
+
+                String modelName = resolveModelName(modelTitle, defaultModelName);
+                Schema model = modelFromProperty(openAPI, cp, modelName);
+                String existing = matchGenerated(model);
+                Content content = response.getContent();
+                for (MediaType mediaType : content.values()) {
+                    if (existing != null) {
+                        Schema schema = this.makeSchema(existing, property);
+                        schema.setRequired(cp.getRequired());
+                        mediaType.setSchema(schema);
+                    } else {
+                        Schema schema = this.makeSchema(modelName, property);
+                        cp.getAllOf().forEach(allOfProperty -> {
+                            String ref = allOfProperty.get$ref();
+                            String[] refNameSplit = ref.split("/");
+                            String refName = refNameSplit[refNameSplit.length - 1];
+                            Schema referencedSchema = openAPI.getComponents().getSchemas().get(refName);
+                            referencedSchema.getProperties().forEach((propKey, propValue) -> {
+                                schema.addProperties((String) propKey, (Schema) propValue);
+                                model.addRequiredItem((String) propKey);
+                            });
+                        });
+
+                        schema.setType("object");
+                        schema.setRequired(cp.getRequired());
+                        mediaType.setSchema(schema);
+                        addGenerated(modelName, schema);
+                        openAPI.getComponents().addSchemas(modelName, schema);
+                    }
+                }
             } else if (property instanceof ArraySchema) {
                 ArraySchema ap = (ArraySchema) property;
                 Schema inner = ap.getItems();
