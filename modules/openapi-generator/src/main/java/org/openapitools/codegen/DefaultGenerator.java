@@ -588,12 +588,16 @@ public class DefaultGenerator implements Generator {
                 operation.put("basePathWithoutHost", removeTrailingSlash(config.encodePath(url.getPath())));
                 operation.put("contextPath", contextPath);
                 operation.put("baseName", tag);
-                operation.put("apiPackage", config.apiPackage());
+
+                String packageName = config.apiPackage() + "." + tag.toLowerCase(Locale.ROOT);
+                operation.put("apiPackage", packageName);
+//                operation.put("apiPackage", config.apiPackage());
+
                 operation.put("modelPackage", config.modelPackage());
                 operation.putAll(config.additionalProperties());
                 operation.put("classname", config.toApiName(tag));
                 operation.put("classVarName", config.toApiVarName(tag));
-                operation.put("importPath", config.toApiImport(tag));
+                operation.put("importPath", config.toApiImport(tag)); //TODO: Fix this??
                 operation.put("classFilename", config.toApiFilename(tag));
                 operation.put("strictSpecBehavior", config.isStrictSpecBehavior());
 
@@ -1203,7 +1207,10 @@ public class DefaultGenerator implements Generator {
         objs.put("operation", ops);
 
         operations.put("operations", objs);
-        operations.put("package", config.apiPackage());
+
+        String packageName = config.apiPackage() + "." + tag.toLowerCase(Locale.ROOT);
+        operations.put("package", packageName);
+//        operations.put("package", config.apiPackage());
 
         Set<String> allImports = new ConcurrentSkipListSet<>();
         for (CodegenOperation op : ops) {

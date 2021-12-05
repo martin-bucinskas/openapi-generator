@@ -5264,7 +5264,7 @@ public class DefaultCodegen implements CodegenConfig {
     @Override
     public String apiFilename(String templateName, String tag) {
         String suffix = apiTemplateFiles().get(templateName);
-        return apiFileFolder() + File.separator + toApiFilename(tag) + suffix;
+        return apiFileFolder() + File.separator + tag.toLowerCase(Locale.ROOT) + File.separator + toApiFilename(tag) + suffix;
     }
 
     @Override
