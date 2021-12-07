@@ -85,6 +85,7 @@ public class SpringCodegen extends AbstractJavaCodegen
     public static final String SINGLE_CONTENT_TYPES = "singleContentTypes";
     public static final String VIRTUAL_SERVICE = "virtualService";
     public static final String SKIP_DEFAULT_INTERFACE = "skipDefaultInterface";
+    public static final String SKIP_GET_REQUEST = "skipGetRequest";
 
     public static final String JAVA_8 = "java8";
     public static final String ASYNC = "async";
@@ -131,6 +132,7 @@ public class SpringCodegen extends AbstractJavaCodegen
     protected boolean unhandledException = false;
     protected boolean useSpringController = false;
     protected boolean oas3 = false;
+    protected boolean skipGetRequest = true;
 
     public SpringCodegen() {
         super();
@@ -213,6 +215,7 @@ public class SpringCodegen extends AbstractJavaCodegen
         cliOptions.add(CliOption.newBoolean(UNHANDLED_EXCEPTION_HANDLING,
                 "Declare operation methods to throw a generic exception and allow unhandled exceptions (useful for Spring `@ControllerAdvice` directives).",
                 unhandledException));
+        cliOptions.add(CliOption.newBoolean(SKIP_GET_REQUEST, "Skip generation of getRequest in delegate", skipGetRequest));
 
         supportedLibraries.put(SPRING_BOOT, "Spring-boot Server application using the SpringFox integration.");
         supportedLibraries.put(SPRING_MVC_LIBRARY, "Spring-MVC Server application using the SpringFox integration.");
@@ -401,6 +404,10 @@ public class SpringCodegen extends AbstractJavaCodegen
 
         if (useOptional) {
             writePropertyBack(USE_OPTIONAL, useOptional);
+        }
+
+        if (skipGetRequest) {
+            additionalProperties.put("skip-get-request", true);
         }
 
         if (interfaceOnly && delegatePattern) {
