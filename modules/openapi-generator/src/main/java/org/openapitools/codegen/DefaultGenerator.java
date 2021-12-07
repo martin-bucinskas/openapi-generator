@@ -1115,7 +1115,9 @@ public class DefaultGenerator implements Generator {
         }
 
         if (tags.isEmpty()) {
-            tags.add(new Tag().name("default"));
+            LOGGER.error("Missing tag for {}\t;{} {}\nExiting...", resourcePath, httpMethod, operation);
+            System.exit(-1);
+//            tags.add(new Tag().name("default"));
         }
 
         /*
