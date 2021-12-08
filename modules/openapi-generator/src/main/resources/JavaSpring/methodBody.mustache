@@ -1,22 +1,22 @@
 {{^reactive}}
 {{#examples}}
-    {{#-first}}
+    {{^skip-get-request}}{{#-first}}
         {{#jdk8}}
             {{#async}}
 return CompletableFuture.supplyAsync(()-> {
             {{/async}}getRequest().ifPresent(request -> {
 {{#async}}    {{/async}}            {{/jdk8}}for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-    {{/-first}}
+    {{/-first}}{{/skip-get-request}}{{^skip-get-request}}
 {{#async}}        {{/async}}{{^async}}{{#jdk8}}    {{/jdk8}}{{/async}}            if (mediaType.isCompatibleWith(MediaType.valueOf("{{{contentType}}}"))) {
 {{#async}}        {{/async}}{{^async}}{{#jdk8}}    {{/jdk8}}{{/async}}                String exampleString = {{>exampleString}};
 {{#async}}        {{/async}}{{^async}}{{#jdk8}}    {{/jdk8}}{{/async}}                ApiUtil.setExampleResponse(request, "{{{contentType}}}", exampleString);
 {{#async}}        {{/async}}{{^async}}{{#jdk8}}    {{/jdk8}}{{/async}}                break;
 {{#async}}        {{/async}}{{^async}}{{#jdk8}}    {{/jdk8}}{{/async}}            }
-    {{#-last}}
+    {{/skip-get-request}}{{#-last}}{{^skip-get-request}}
 {{#async}}        {{/async}}{{^async}}{{#jdk8}}    {{/jdk8}}{{/async}}        }
         {{#jdk8}}
 {{#async}}    {{/async}}        });
-        {{/jdk8}}
+        {{/jdk8}}{{/skip-get-request}}
 {{#async}}    {{/async}}        return new ResponseEntity<>({{#returnSuccessCode}}HttpStatus.valueOf({{{statusCode}}}){{/returnSuccessCode}}{{^returnSuccessCode}}HttpStatus.NOT_IMPLEMENTED{{/returnSuccessCode}});
         {{#jdk8}}
             {{#async}}
