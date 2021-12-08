@@ -572,7 +572,7 @@ public class DefaultGenerator implements Generator {
         if (apisToGenerate != null && !apisToGenerate.isEmpty()) {
             Map<String, List<CodegenOperation>> updatedPaths = new TreeMap<>();
             for (String m : paths.keySet()) {
-                if (apisToGenerate.contains(m)) {
+                if (apisToGenerate.contains(m) || apisToGenerate.contains(m.toLowerCase(Locale.ROOT))) {
                     updatedPaths.put(m, paths.get(m));
                 }
             }
