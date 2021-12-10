@@ -590,6 +590,9 @@ public class DefaultGenerator implements Generator {
                 operation.put("baseName", tag);
 
                 String packageName = config.apiPackage() + "." + tag.toLowerCase(Locale.ROOT);
+                if (config.getName().equals("business-logic")) {
+                    packageName = config.apiPackage();
+                }
                 operation.put("apiPackage", packageName);
 //                operation.put("apiPackage", config.apiPackage());
 
@@ -1211,6 +1214,9 @@ public class DefaultGenerator implements Generator {
         operations.put("operations", objs);
 
         String packageName = config.apiPackage() + "." + tag.toLowerCase(Locale.ROOT);
+        if (config.getName().equals("business-logic")) {
+            packageName = config.apiPackage();
+        }
         operations.put("package", packageName);
 //        operations.put("package", config.apiPackage());
 

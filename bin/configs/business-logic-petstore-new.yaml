@@ -1,0 +1,6 @@
+generatorName: business-logic
+outputDir: samples/server/petstore/business/logic
+inputSpec: modules/openapi-generator/src/test/resources/3_0/petstore.yaml
+templateDir: modules/openapi-generator/src/main/resources/business-logic
+additionalProperties:
+  hideGenerationTimestamp: "true"
