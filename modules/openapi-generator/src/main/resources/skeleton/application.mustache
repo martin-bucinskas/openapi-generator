@@ -1,0 +1,7 @@
+server:
+    port: {{serverPort}}
+logging:
+    pattern:
+        console: "%clr(%d{dd-MM-yyyy HH:mm:ss}){faint} org{apiruntime} AppName:{{apiTag}}-service Environment=${env} TraceId: [%X{traceparent}] [%X{http.endpoint}] %replace(%m %xThrowable){'[\n]+','\n'} %nopex %n"
+
+

@@ -1,7 +1,8 @@
 package {{package}};
 
-import {{commsModelBasePackage}}.model.*;
-import {{commsModelBasePackage}}.{{apiTag}}.*;
+{{#imports}}import {{import}};
+{{/imports}}
+import io.swagger.annotations.*;
 {{#vendorExtensions.x-spring-paginated}}
 import org.springframework.data.domain.Pageable;
 {{/vendorExtensions.x-spring-paginated}}
@@ -19,7 +20,6 @@ import org.springframework.http.codec.multipart.Part;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 {{#jdk8}}
 import java.util.Optional;
 {{/jdk8}}

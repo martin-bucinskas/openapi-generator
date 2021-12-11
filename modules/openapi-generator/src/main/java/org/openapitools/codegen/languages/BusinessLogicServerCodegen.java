@@ -215,7 +215,24 @@ public class BusinessLogicServerCodegen extends AbstractJavaCodegen
             unhandledException));
         cliOptions.add(CliOption.newBoolean(SKIP_GET_REQUEST, "Skip generation of getRequest in delegate", skipGetRequest));
 
-        supportedLibraries.put(SPRING_BOOT, "Spring-boot Server application using the SpringFox integration.");
+        cliOptions.add(new CliOption("commsModelBasePackage", "Communication model base package").defaultValue("com.example"));
+        cliOptions.add(new CliOption("commsModelGroupId", "Communication model group id").defaultValue("com.example"));
+        cliOptions.add(new CliOption("commsModelArtifactId", "Communication model artifact id").defaultValue("comms-model"));
+        cliOptions.add(new CliOption("commsModelVersion", "Communication model version").defaultValue("1.0.0"));
+
+        cliOptions.add(new CliOption("implGroupId", "Communication model group id").defaultValue("com.example"));
+        cliOptions.add(new CliOption("implArtifactId", "Communication model artifact id").defaultValue("impl"));
+        cliOptions.add(new CliOption("implVersion", "Communication model version").defaultValue("1.0.0"));
+
+//    <implGroupId>${env.IMPL_GROUP_ID}</implGroupId>
+//                            <implArtifactId>${env.IMPL_ARTIFACT_ID}</implArtifactId>
+//                            <implVersion>${env.IMPL_VERSION}</implVersion>
+//        <commsModelGroupId>${env.COMMS_MODEL_GROUP_ID}</commsModelGroupId>
+//        <commsModelArtifactId>${env.COMMS_MODEL_ARTIFACT_ID}</commsModelArtifactId>
+//        <commsModelVersion>${env.COMMS_MODEL_VERSION}</commsModelVersion>
+
+
+            supportedLibraries.put(SPRING_BOOT, "Spring-boot Server application using the SpringFox integration.");
         supportedLibraries.put(SPRING_MVC_LIBRARY, "Spring-MVC Server application using the SpringFox integration.");
         supportedLibraries.put(SPRING_CLOUD_LIBRARY,
             "Spring-Cloud-Feign client with Spring-Boot auto-configured settings.");
@@ -278,6 +295,10 @@ public class BusinessLogicServerCodegen extends AbstractJavaCodegen
             this.setBasePackage((String) additionalProperties.get(CodegenConstants.INVOKER_PACKAGE));
             additionalProperties.put(BASE_PACKAGE, basePackage);
             LOGGER.info("Set base package to invoker package ({})", basePackage);
+        }
+
+        if (additionalProperties.containsKey(BASE_PACKAGE)) {
+            apiPackage = additionalProperties.get(BASE_PACKAGE).toString() + ".delegate";
         }
 
         super.processOpts();
@@ -403,9 +424,9 @@ public class BusinessLogicServerCodegen extends AbstractJavaCodegen
 
         supportingFiles.add(new SupportingFile("pom.mustache", "", "pom.xml"));
         supportingFiles.add(new SupportingFile("README.mustache", "", "README.md"));
-        supportingFiles.add(new SupportingFile("openapi2SpringBoot.mustache",
-            (sourceFolder + File.separator + basePackage).replace(".", File.separator),
-            "Application.java"));
+//        supportingFiles.add(new SupportingFile("openapi2SpringBoot.mustache",
+//            (sourceFolder + File.separator + basePackage).replace(".", File.separator),
+//            "Application.java"));
 
         apiTemplateFiles.clear();
         modelTemplateFiles.clear();
@@ -532,6 +553,9 @@ public class BusinessLogicServerCodegen extends AbstractJavaCodegen
                             for (final String tag : operation.getTags()) {
                                 final Map<String, String> value = new HashMap<>();
                                 value.put("tag", tag);
+                                if (!additionalProperties.containsKey("apiTag")) {
+                                    additionalProperties.put("apiTag", tag);
+                                }
                                 tags.add(value);
                             }
                             if (operation.getTags().size() > 0) {

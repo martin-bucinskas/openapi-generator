@@ -8,11 +8,11 @@
         <version>2.5.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>{{groupId}}</groupId>
-    <artifactId>{{artifactId}}</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>{{artifactId}}</name>
-    <description>Project template for Spring Boot</description>
+    <groupId>{{implGroupId}}</groupId>
+    <artifactId>{{implArtifactId}}</artifactId>
+    <version>{{implVersion}}</version>
+    <name>{{implArtifactId}}</name>
+    <description>Initial implementation for Spring Boot</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -32,9 +32,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.unicornfinance</groupId>
-            <artifactId>specification</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <groupId>{{commsModelGroupId}}</groupId>
+            <artifactId>{{commsModelArtifactId}}</artifactId>
+            <version>{{commsModelVersion}}</version>
         </dependency>
     </dependencies>
 

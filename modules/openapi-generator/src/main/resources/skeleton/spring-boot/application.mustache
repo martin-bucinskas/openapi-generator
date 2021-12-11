@@ -1,0 +1,7 @@
+server:
+    port: {{serverPort}}
+logging:
+    pattern:
+        console: "%clr(%d{dd-MM-yyyy HH:mm:ss}){faint} org{apiruntime} AppName:{{appName}} Environment=${env} TraceId: [%X{X-B3-TraceId}] [%X{http.endpoint}] %replace(%m %xThrowable){'[\n]+','\n'} %nopex %n"
+#AppName should be taken from user input provided in generated.
+
