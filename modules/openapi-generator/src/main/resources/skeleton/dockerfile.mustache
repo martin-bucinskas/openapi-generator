@@ -1,0 +1,23 @@
+FROM maven:3.8-openjdk-17 AS build
+COPY src /home/app/src
+COPY pom.xml /home/app
+
+# This step is required for the time being as the artifact is not in artifactory
+COPY tmp/{{commsModelArtifactId}}-{{commsModelVersion}}.jar /home/app
+COPY tmp/{{implArtifactId}}-{{implVersion}}.jar /home/app
+
+RUN mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile="/home/app/{{commsModelArtifactId}}-{{commsModelVersion}}.jar" -DgroupId="{{commsModelGroupId}}" -DartifactId="{{commsModelArtifactId}}" -Dversion="{{commsModelVersion}}"
+RUN mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile="/home/app/{{implArtifactId}}-{{implVersion}}.jar" -DgroupId="{{implGroupId}}" -DartifactId="{{implArtifactId}}" -Dversion="{{implVersion}}" -Dpackaging="jar"
+
+RUN mvn -f /home/app/pom.xml clean package
+
+FROM openjdk:17-alpine
+COPY --from=build /home/app/target/*.jar /{{outerShellArtifactId}}-{{outerShellVersion}}.jar
+EXPOSE 8080
+
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar /{{outerShellArtifactId}}-{{outerShellVersion}}.jar"]
+
+LABEL api={{implArtifactId}}
+LABEL apiVersion={{implVersion}}
+LABEL commsModel={{commsModelArtifactId}}
+LABEL commsModelVersion={{commsModelVersion}}

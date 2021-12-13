@@ -453,6 +453,8 @@ public class SkeletonServerCodegen extends AbstractJavaCodegen
         supportingFiles.add(new SupportingFile("application.mustache",
             ("src.main.resources").replace(".", java.io.File.separator), "application.yaml"));
 
+        supportingFiles.add(new SupportingFile("dockerfile.mustache", "", "Dockerfile"));
+
         apiTemplateFiles.clear();
         modelTemplateFiles.clear();
 
